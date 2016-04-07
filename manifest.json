@@ -10,11 +10,16 @@
     "storage"
 ],
 
-"web_accessible_resources": ["src/bakedEmotes.js"],
+"background": {
+    "persistent": false,
+    "scripts": [ "src/worker_proxy.js", "src/EmoteSearcher.js" ]
+},
+
+"web_accessible_resources": ["src/EmoteSearcher.js","src/worker_proxy.html"],
 "content_scripts": [
     {
       "matches": ["https://web.whatsapp.com/*"],
-      "js": ["/src/script.js"]
+      "js": ["src/worker_proxy.js","/src/script.js"]
     }
   ]
 }
