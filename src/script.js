@@ -3,7 +3,7 @@ var worker = null;
 var workerTaskDone = true;
 var gEmotesEncoded = null;
 
-var loadUrl = function(url)
+function loadUrl(url)
 {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open("GET", url, false);
@@ -15,32 +15,37 @@ var loadUrl = function(url)
     return xmlhttp.responseText;
 }
 
-var createEmoteWorker = function()
+function createEmoteWorker()
 {
   worker = new Worker(chrome.runtime.getURL('src/EmoteSearcher.js'));
+  encodeEmotes();
+  worker.postMessage([0 ,gEmotesEncoded]);
 }
 
 // Encoding for cross-thread jobs.
-var encodeEmotes = function()
+function encodeEmotes()
 {
   var obj = JSON.stringify(gEmotes);
   gEmotesEncoded = new TextEncoder(document.characterSet.toLowerCase()).encode(obj);
 }
 
-var loadEmotes = function()
+function loadEmotes()
 {
   console.log("Loading emotes...");
   var url = "https://api.twitch.tv/kraken/chat/emoticons";
   gEmotes = JSON.parse(loadUrl(url));
   console.log("LOADED "+gEmotes.emoticons.length+" EMOTES!")
+
   createEmoteWorker();
-  encodeEmotes();
 }
 
 loadEmotes();
 
-var createEmote = function(emoteW, imageURL, elemid)
+function createEmote(emoteW, imageURL, elemid)
 {
+  if(emoteW === "S" || emoteW === "R") // banned emotes
+    return;
+
   var tags = document.getElementsByClassName('emojitext selectable-text');
 
   for(var i = 0; i < tags.length; i++)
@@ -56,7 +61,7 @@ var createEmote = function(emoteW, imageURL, elemid)
   }
 }
 
-var updateWorker = function()
+function updateWorker()
 {
   if(workerTaskDone)
   {
@@ -74,7 +79,7 @@ var updateWorker = function()
       }
     }
 
-    worker.postMessage([o, gEmotesEncoded]);
+    worker.postMessage([1,o]);
   }
 }
 
