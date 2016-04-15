@@ -82,7 +82,7 @@ function createEmote(emoteW, imageURL, elemid)
   {
     if(tags[i].attributes != undefined &&
       tags[i].attributes.length == 3 &&
-       tags[i].attributes[2].nodeValue === elemid)
+      tags[i].attributes[2].nodeValue === elemid)
     {
       var emote = '<img src="'+imageURL+'">';
       if(tags[i].innerHTML.indexOf(emoteW) != -1) // No changes needed if the emote is already loaded.
