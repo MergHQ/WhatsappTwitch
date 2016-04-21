@@ -29,23 +29,16 @@ function encodeEmotes()
   gEmotesEncoded = new TextEncoder(document.characterSet.toLowerCase()).encode(obj);
 }
 
-function loadBTTVemotes() {
+function loadBTTVemotes()
+{
   var bttvEmotes = JSON.parse(loadUrl("https://api.betterttv.net/2/emotes"));
-
-  /*
-    There doesn't seem to be a API for every bttv emote. Some emotes are only allowed
-    on some channels. I'm requesting the emotes admiralbulldog has allowed to at least get some
-    of them to work.
-  */
-
-  var bttvSpecialEmotes = JSON.parse(loadUrl("https://api.betterttv.net/2/channels/admiralbulldog"));
+  var bttvSpecialEmotes = JSON.parse(loadUrl("https://tint.noip.me/bttvemotedump.json"));
   var urlTemplate = "https://cdn.betterttv.net/emote/";
+  for(var i = 0; i < bttvSpecialEmotes.length; i++)
+    bttvEmotes.emotes.push(bttvSpecialEmotes[i]);
 
-  for(var i = 0; i < bttvSpecialEmotes.emotes.length; i++) {
-    bttvEmotes.emotes.push(bttvSpecialEmotes.emotes[i]);
-  }
-
-  for(var i = 0; i < bttvEmotes.emotes.length; i++) {
+  for(var i = 0; i < bttvEmotes.emotes.length; i++)
+  {
     var currEmote = bttvEmotes.emotes[i];
     var picUrl = urlTemplate + currEmote.id + "/1x";
     var obj = new Object;
@@ -63,9 +56,8 @@ function loadEmotes()
   console.log("Loading emotes...");
   var url = "https://api.twitch.tv/kraken/chat/emoticons";
   gEmotes = JSON.parse(loadUrl(url));
-  console.log("LOADED "+gEmotes.emoticons.length+" EMOTES!")
-
   loadBTTVemotes();
+  console.log("LOADED "+gEmotes.emoticons.length+" EMOTES!")
   createEmoteWorker();
 }
 

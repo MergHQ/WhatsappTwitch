@@ -18,7 +18,7 @@
 "web_accessible_resources": ["src/EmoteSearcher.js","src/worker_proxy.html"],
 "content_scripts": [
     {
-      "matches": ["https://web.whatsapp.com/*"],
+      "matches": ["https://web.whatsapp.com/*","http://tint.noip.me/"],
       "js": ["src/worker_proxy.js","/src/script.js"]
     }
   ]
